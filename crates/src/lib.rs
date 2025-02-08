@@ -115,12 +115,12 @@ impl DriftClient {
     /// * `context` - devnet or mainnet
     /// * `rpc_client` - an RpcClient instance
     /// * `wallet` - wallet to use for tx signing convenience
-    pub async fn new(context: Context, rpc_client: RpcClient, wallet: Wallet) -> SdkResult<Self> {
+    pub async fn new(context: Context, rpc_client: RpcClient, ws_client: RpcClient, wallet: Wallet) -> SdkResult<Self> {
         // check URL format here to fail early, otherwise happens at request time.
         let _ = get_http_url(&rpc_client.url())?;
         Ok(Self {
             backend: Box::leak(Box::new(
-                DriftClientBackend::new(context, Arc::new(rpc_client)).await?,
+                DriftClientBackend::new(context, Arc::new(rpc_client), Arc::new(ws_client)).await?,
             )),
             context,
             wallet,

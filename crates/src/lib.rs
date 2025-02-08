@@ -620,9 +620,9 @@ pub struct DriftClientBackend {
 
 impl DriftClientBackend {
     /// Initialize a new `DriftClientBackend`
-    async fn new(context: Context, rpc_client: Arc<RpcClient>) -> SdkResult<Self> {
+    async fn new(context: Context, rpc_client: Arc<RpcClient>, ws_client: Arc<RpcClient>) -> SdkResult<Self> {
         let pubsub_client =
-            Arc::new(PubsubClient::new(&get_ws_url(rpc_client.url().as_str())?).await?);
+            Arc::new(PubsubClient::new(&get_ws_url(ws_client.url().as_str())?).await?);
 
         let perp_market_map =
             MarketMap::<PerpMarket>::new(Arc::clone(&pubsub_client), rpc_client.commitment());
